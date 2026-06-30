@@ -52,7 +52,7 @@ public class Product {
         Rear
      */
     public void addBatch(Batch batch) {
-//        batchQueue.enqueue(batch);
+        batchQueue.enqueue(batch); // Đã mở khóa việc thêm Batch vào Queue
     }
 
     /*
@@ -73,28 +73,19 @@ public class Product {
         Queue cần hỗ trợ duyệt node để hàm này hoạt động
     */
     public int getTotalQuantity() {
-
         int total = 0;
 
-        /*
-            Tạm thời để TODO
-            Chờ HUY hoàn thiện Queue
-        */
+        // Bắt đầu duyệt từ node đầu tiên (Front) của Queue
+        LinearNode<Batch> current = batchQueue.getFront();
 
-        // Example sau này:
-
-        /*
-        LinearNode<Batch> current
-                = batchQueue.getFront();
-
-        while(current != null){
-
-            total += current.data.getQuantity();
-
-            current = current.next;
-
+        // Duyệt qua từng node cho đến khi kết thúc (current == null)
+        while (current != null) {
+            // Lấy data (Batch) từ node hiện tại, sau đó cộng dồn quantity
+            total += current.getData().getQuantity();
+            
+            // Di chuyển sang node tiếp theo
+            current = current.getNext();
         }
-        */
 
         return total;
     }
