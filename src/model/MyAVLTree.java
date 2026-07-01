@@ -1,10 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-import model.Product;
-import model.TreeNode;
-
 public class MyAVLTree {
 
     private TreeNode root;
