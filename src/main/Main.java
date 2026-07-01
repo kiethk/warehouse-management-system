@@ -1,77 +1,70 @@
 package main;
 
-import model.MyAVLTree;
-import model.Product;
+import controller.WarehouseController;
+import java.util.Scanner;
+import view.MenuView;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        MyAVLTree tree = new MyAVLTree();
+        WarehouseController controller
+                =new WarehouseController();
 
-        tree.insert(
-                new Product(
-                        "P003",
-                        "Milk"
-                )
-        );
+        Scanner sc=new Scanner(System.in);
 
-        tree.insert(
-                new Product(
-                        "P001",
-                        "Egg"
-                )
-        );
+        /*
+        =================================================
 
-        tree.insert(
-                new Product(
-                        "P005",
-                        "Soap"
-                )
-        );
+        QUANG:
 
-        tree.insert(
-                new Product(
-                        "P002",
-                        "Shampoo"
-                )
-        );
+        Main điều phối toàn bộ project
 
-        System.out.println("===== In-order =====");
+        Flow:
 
-        tree.inOrder();
+        Start Program
 
-        System.out.println();
+            ↓
 
-        System.out.println(
-                "Tree Height: "
-                + tree.getHeight()
-        );
+        Display Menu
 
-        System.out.println();
+            ↓
 
-        tree.displayTreeStructure();
+        User chọn chức năng
 
-        System.out.println();
+            ↓
 
-        Product p =
-                tree.search("P002");
+        gọi WarehouseController
 
-        if(p!=null){
+        =================================================
+        */
 
-            System.out.println(
-                    "Found: "
-                    + p
-            );
 
-        }
-        else{
+        // TODO QUANG:
+        // while(true)
 
-            System.out.println(
-                    "Not found"
-            );
+        // TODO QUANG:
+        // switch(choice)
 
-        }
+        /*
+        Example:
+
+        case 1:
+
+            // HUY:
+            // addBatch()
+
+        break;
+
+
+        case 3:
+
+            // KIỆT:
+            // searchProduct()
+
+        break;
+
+        */
 
     }
 
