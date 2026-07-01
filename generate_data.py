@@ -2,7 +2,6 @@ import csv
 import random
 import os
 from datetime import datetime, timedelta
-from collections import defaultdict
 
 # Constants
 PRODUCT_NAMES = [
@@ -18,6 +17,14 @@ TODAY = datetime.now().date()
 PRICE_OPTIONS = [10000, 15000, 20000, 25000, 30000, 35000, 40000, 
                  45000, 50000, 55000, 60000, 65000, 70000, 75000, 
                  80000, 85000, 90000, 95000, 100000]
+
+PRODUCT_BARCODES = {
+    name: f"P{i + 1:04d}"
+    for i, name in enumerate(PRODUCT_NAMES)
+}
+
+INITIAL_BATCH_START = 1
+ADD_BATCH_START = 100001
 
 def create_directories():
     """Create required folder structure"""
@@ -43,25 +50,14 @@ def generate_warehouse_dataset(filename, num_records):
     near_expiry_count = int(num_records * random.uniform(0.10, 0.15))
     near_expiry_indices = set(random.sample(range(num_records), near_expiry_count))
     
-    # Generate product-barcode mapping
-    # First, determine how many unique products we want (20-50% of records)
-    num_unique_products = max(1, int(num_records * random.uniform(0.20, 0.50)))
-    
-    # Select unique products
-    available_products = random.sample(PRODUCT_NAMES, min(num_unique_products, len(PRODUCT_NAMES)))
-    if num_unique_products > len(PRODUCT_NAMES):
-        # If we need more unique products, allow repeats with different barcodes
-        while len(available_products) < num_unique_products:
-            available_products.append(random.choice(PRODUCT_NAMES))
-    
-    # Generate barcodes for products (each unique product gets a barcode)
-    product_barcodes = {}
-    product_names = []
-    for i in range(num_unique_products):
-        barcode = f"P{i+1:04d}"
-        product_name = available_products[i]
-        product_barcodes[product_name] = barcode
-        product_names.append(product_name)
+    # Use a stable barcode for each product name across every generated file.
+    # Initial datasets can only contain products from the fixed product list.
+    num_unique_products = max(1, min(
+        len(PRODUCT_NAMES),
+        int(num_records * random.uniform(0.20, 0.50))
+    ))
+
+    selected_products = random.sample(PRODUCT_NAMES, num_unique_products)
     
     # Distribute records among products with at least 1 batch per product
     batch_distribution = [1] * num_unique_products  # Start with 1 batch each
@@ -77,13 +73,12 @@ def generate_warehouse_dataset(filename, num_records):
     random.shuffle(product_order)
     
     records = []
-    batch_counter = 1
-    barcode_counter = len(product_barcodes) + 1
+    batch_counter = INITIAL_BATCH_START
     
     record_idx = 0
     for product_idx in product_order:
-        product_name = product_names[product_idx]
-        barcode = product_barcodes[product_name]
+        product_name = selected_products[product_idx]
+        barcode = PRODUCT_BARCODES[product_name]
         num_batches = batch_distribution[product_idx]
         
         for _ in range(num_batches):
@@ -124,8 +119,9 @@ def generate_warehouse_dataset(filename, num_records):
     unique_products = len(set(r['barcode'] for r in records))
     unique_batches = len(set(r['batchCode'] for r in records))
     near_expiry = sum(1 for r in records if (datetime.strptime(r['expiryDate'], '%Y-%m-%d').date() - TODAY).days <= 7)
-    barcode_range = f"{records[0]['barcode']} - {records[-1]['barcode']}"
-    batch_range = f"B00001 - B{batch_counter-1:05d}"
+    sorted_barcodes = sorted(set(r['barcode'] for r in records))
+    barcode_range = f"{sorted_barcodes[0]} - {sorted_barcodes[-1]}"
+    batch_range = f"B{INITIAL_BATCH_START:05d} - B{batch_counter - 1:05d}"
     
     return {
         'rows': len(records),
@@ -155,9 +151,8 @@ def generate_add_transactions(filename, warehouse_file, num_transactions):
     
     product_list = list(unique_products.items())
     
-    # Find existing batch codes
-    existing_batches = set(r['batchCode'] for r in warehouse_records)
     max_batch_num = max(int(r['batchCode'][1:]) for r in warehouse_records)
+    next_batch_num = max(ADD_BATCH_START, max_batch_num + 1)
     
     records = []
     for i in range(num_transactions):
@@ -165,8 +160,8 @@ def generate_add_transactions(filename, warehouse_file, num_transactions):
         barcode, product_name = random.choice(product_list)
         
         # Generate new batch code
-        max_batch_num += 1
-        batch_code = f"B{max_batch_num:05d}"
+        batch_code = f"B{next_batch_num:05d}"
+        next_batch_num += 1
         
         # Generate expiry date (some near expiry)
         if random.random() < 0.15:  # 15% near expiry
@@ -204,7 +199,7 @@ def generate_add_transactions(filename, warehouse_file, num_transactions):
         'rows': len(records),
         'unique_products': unique_products_used,
         'near_expiry': near_expiry,
-        'batch_range': f"B{max_batch_num - num_transactions + 1:05d} - B{max_batch_num:05d}"
+        'batch_range': f"B{max(ADD_BATCH_START, max_batch_num + 1):05d} - B{next_batch_num - 1:05d}"
     }
 
 def generate_dispatch_transactions(filename, warehouse_file, num_transactions):

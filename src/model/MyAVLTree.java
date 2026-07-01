@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyAVLTree {
 
     private TreeNode root;
@@ -96,6 +99,16 @@ public class MyAVLTree {
         displayTree(root, "", true);
 
     }
+
+        public List<Product> toProductList() {
+
+                List<Product> products = new ArrayList<>();
+
+                collectProducts(root, products);
+
+                return products;
+
+        }
 
 
     // =====================================================
@@ -386,6 +399,22 @@ public class MyAVLTree {
         inOrderRecursive(root.right);
 
     }
+
+        private void collectProducts(
+                        TreeNode node,
+                        List<Product> products) {
+
+                if (node == null) {
+                        return;
+                }
+
+                collectProducts(node.left, products);
+
+                products.add(node.data);
+
+                collectProducts(node.right, products);
+
+        }
 
 
     // =====================================================
