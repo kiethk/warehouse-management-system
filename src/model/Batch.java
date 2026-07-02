@@ -10,37 +10,6 @@ public class Batch {
     private int quantity;
     private double price;
 
-    /*
-    =================================================
-
-    HUY:
-
-    Batch đại diện cho một lô hàng.
-
-    Ví dụ:
-
-    Batch B001
-
-    quantity = 30
-    expiryDate = 2026-07-01
-    price = 25000
-
-    Product Egg:
-
-        Front
-
-        B001
-        B002
-        B003
-
-        Rear
-
-    Queue sẽ quản lý thứ tự nhập/xuất.
-
-    =================================================
-    */
-
-
     // TODO HUY:
     // constructor
     public Batch(String batchCode, LocalDate expiryDate, int quantity, double price) {

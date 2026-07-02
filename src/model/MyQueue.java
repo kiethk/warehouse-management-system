@@ -9,48 +9,6 @@ public class MyQueue<T> {
     // Thêm biến size để tối ưu hóa hàm size() thành O(1) thay vì O(N)
     private int size;
 
-    /*
-    =================================================
-
-    HUY:
-
-    Queue quản lý Batch theo FIFO
-
-    Example:
-
-    Front
-
-    B001
-    B002
-    B003
-
-    Rear
-
-
-    enqueue()
-
-    Front
-
-    B001
-    B002
-    B003
-    B004
-
-    Rear
-
-
-    dequeue()
-
-    Front
-
-    B002
-    B003
-    B004
-
-    Rear
-
-    =================================================
-    */
 
     public MyQueue() {
         this.front = null;

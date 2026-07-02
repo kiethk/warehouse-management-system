@@ -7,30 +7,6 @@ public class MyAVLTree {
 
     private TreeNode root;
 
-    /*
-    =================================================
-
-    KIỆT:
-
-    Key:
-    product.getBarcode()
-
-    Example:
-
-            P003
-           /    \
-        P001    P005
-
-    Purpose:
-
-    - Search product O(log n)
-    - Insert product
-    - Delete product
-    - Display product list
-
-    =================================================
-    */
-
     public MyAVLTree() {
         root = null;
     }
@@ -41,14 +17,14 @@ public class MyAVLTree {
 
     /*
         Insert product vào cây AVL
-    */
+     */
     public void insert(Product product) {
         root = insertRecursive(root, product);
     }
 
     /*
         Xóa product theo barcode
-    */
+     */
     public void delete(String barcode) {
         root = deleteRecursive(root, barcode);
     }
@@ -59,7 +35,7 @@ public class MyAVLTree {
         Return:
             Product nếu tìm thấy
             null nếu không tìm thấy
-    */
+     */
     public Product search(String barcode) {
 
         TreeNode node = searchRecursive(root, barcode);
@@ -77,21 +53,21 @@ public class MyAVLTree {
         P002
         P003
         P004
-    */
+     */
     public void inOrder() {
         inOrderRecursive(root);
     }
 
     /*
         Hiển thị chiều cao cây
-    */
+     */
     public int getHeight() {
         return getHeight(root);
     }
 
     /*
         Display cây dạng text
-    */
+     */
     public void displayTreeStructure() {
 
         System.out.println("\nAVL Tree:");
@@ -100,27 +76,24 @@ public class MyAVLTree {
 
     }
 
-        public List<Product> toProductList() {
+    public List<Product> toProductList() {
 
-                List<Product> products = new ArrayList<>();
+        List<Product> products = new ArrayList<>();
 
-                collectProducts(root, products);
+        collectProducts(root, products);
 
-                return products;
+        return products;
 
-        }
-
+    }
 
     // =====================================================
     // INSERT
     // =====================================================
-
     private TreeNode insertRecursive(
             TreeNode root,
             Product product) {
 
         // BST insert
-
         if (root == null) {
             return new TreeNode(product);
         }
@@ -132,16 +105,16 @@ public class MyAVLTree {
 
         if (cmp < 0) {
 
-            root.left =
-                    insertRecursive(
+            root.left
+                    = insertRecursive(
                             root.left,
                             product
                     );
 
         } else if (cmp > 0) {
 
-            root.right =
-                    insertRecursive(
+            root.right
+                    = insertRecursive(
                             root.right,
                             product
                     );
@@ -149,27 +122,20 @@ public class MyAVLTree {
         } else {
 
             // duplicate barcode
-
             return root;
         }
 
-
         // update height
-
         root.height = Math.max(
                 getHeight(root.left),
                 getHeight(root.right)
         ) + 1;
 
-
         // rebalance
-
-        int balance =
-                getBalanceFactor(root);
-
+        int balance
+                = getBalanceFactor(root);
 
         // LL
-
         if (balance > 1
                 && product.getBarcode()
                         .compareTo(
@@ -181,7 +147,6 @@ public class MyAVLTree {
         }
 
         // RR
-
         if (balance < -1
                 && product.getBarcode()
                         .compareTo(
@@ -193,30 +158,28 @@ public class MyAVLTree {
         }
 
         // LR
-
         if (balance > 1
                 && product.getBarcode()
                         .compareTo(
                                 root.left.data.getBarcode()
                         ) > 0) {
 
-            root.left =
-                    rotateLeft(root.left);
+            root.left
+                    = rotateLeft(root.left);
 
             return rotateRight(root);
 
         }
 
         // RL
-
         if (balance < -1
                 && product.getBarcode()
                         .compareTo(
                                 root.right.data.getBarcode()
                         ) < 0) {
 
-            root.right =
-                    rotateRight(root.right);
+            root.right
+                    = rotateRight(root.right);
 
             return rotateLeft(root);
 
@@ -226,11 +189,9 @@ public class MyAVLTree {
 
     }
 
-
     // =====================================================
     // DELETE
     // =====================================================
-
     private TreeNode deleteRecursive(
             TreeNode root,
             String barcode) {
@@ -239,23 +200,23 @@ public class MyAVLTree {
             return null;
         }
 
-        int cmp =
-                barcode.compareTo(
+        int cmp
+                = barcode.compareTo(
                         root.data.getBarcode()
                 );
 
         if (cmp < 0) {
 
-            root.left =
-                    deleteRecursive(
+            root.left
+                    = deleteRecursive(
                             root.left,
                             barcode
                     );
 
         } else if (cmp > 0) {
 
-            root.right =
-                    deleteRecursive(
+            root.right
+                    = deleteRecursive(
                             root.right,
                             barcode
                     );
@@ -263,7 +224,6 @@ public class MyAVLTree {
         } else {
 
             // found
-
             if (root.left == null) {
                 return root.right;
             }
@@ -272,32 +232,29 @@ public class MyAVLTree {
                 return root.left;
             }
 
-            TreeNode successor =
-                    findMin(root.right);
+            TreeNode successor
+                    = findMin(root.right);
 
-            root.data =
-                    successor.data;
+            root.data
+                    = successor.data;
 
-            root.right =
-                    deleteRecursive(
+            root.right
+                    = deleteRecursive(
                             root.right,
                             successor.data.getBarcode()
                     );
 
         }
 
-
         root.height = Math.max(
                 getHeight(root.left),
                 getHeight(root.right)
         ) + 1;
 
-        int balance =
-                getBalanceFactor(root);
-
+        int balance
+                = getBalanceFactor(root);
 
         // LL
-
         if (balance > 1
                 && getBalanceFactor(root.left) >= 0) {
 
@@ -306,19 +263,17 @@ public class MyAVLTree {
         }
 
         // LR
-
         if (balance > 1
                 && getBalanceFactor(root.left) < 0) {
 
-            root.left =
-                    rotateLeft(root.left);
+            root.left
+                    = rotateLeft(root.left);
 
             return rotateRight(root);
 
         }
 
         // RR
-
         if (balance < -1
                 && getBalanceFactor(root.right) <= 0) {
 
@@ -327,12 +282,11 @@ public class MyAVLTree {
         }
 
         // RL
-
         if (balance < -1
                 && getBalanceFactor(root.right) > 0) {
 
-            root.right =
-                    rotateRight(root.right);
+            root.right
+                    = rotateRight(root.right);
 
             return rotateLeft(root);
 
@@ -342,11 +296,9 @@ public class MyAVLTree {
 
     }
 
-
     // =====================================================
     // SEARCH
     // =====================================================
-
     private TreeNode searchRecursive(
             TreeNode root,
             String barcode) {
@@ -355,8 +307,8 @@ public class MyAVLTree {
             return null;
         }
 
-        int cmp =
-                barcode.compareTo(
+        int cmp
+                = barcode.compareTo(
                         root.data.getBarcode()
                 );
 
@@ -380,11 +332,9 @@ public class MyAVLTree {
 
     }
 
-
     // =====================================================
     // TRAVERSAL
     // =====================================================
-
     private void inOrderRecursive(
             TreeNode root) {
 
@@ -400,27 +350,25 @@ public class MyAVLTree {
 
     }
 
-        private void collectProducts(
-                        TreeNode node,
-                        List<Product> products) {
+    private void collectProducts(
+            TreeNode node,
+            List<Product> products) {
 
-                if (node == null) {
-                        return;
-                }
-
-                collectProducts(node.left, products);
-
-                products.add(node.data);
-
-                collectProducts(node.right, products);
-
+        if (node == null) {
+            return;
         }
 
+        collectProducts(node.left, products);
+
+        products.add(node.data);
+
+        collectProducts(node.right, products);
+
+    }
 
     // =====================================================
     // ROTATION
     // =====================================================
-
     private TreeNode rotateRight(TreeNode y) {
 
         TreeNode x = y.left;
@@ -431,14 +379,14 @@ public class MyAVLTree {
 
         y.left = T2;
 
-        y.height =
-                Math.max(
+        y.height
+                = Math.max(
                         getHeight(y.left),
                         getHeight(y.right)
                 ) + 1;
 
-        x.height =
-                Math.max(
+        x.height
+                = Math.max(
                         getHeight(x.left),
                         getHeight(x.right)
                 ) + 1;
@@ -446,7 +394,6 @@ public class MyAVLTree {
         return x;
 
     }
-
 
     private TreeNode rotateLeft(TreeNode x) {
 
@@ -458,14 +405,14 @@ public class MyAVLTree {
 
         x.right = T2;
 
-        x.height =
-                Math.max(
+        x.height
+                = Math.max(
                         getHeight(x.left),
                         getHeight(x.right)
                 ) + 1;
 
-        y.height =
-                Math.max(
+        y.height
+                = Math.max(
                         getHeight(y.left),
                         getHeight(y.right)
                 ) + 1;
@@ -474,11 +421,9 @@ public class MyAVLTree {
 
     }
 
-
     // =====================================================
     // HELPERS
     // =====================================================
-
     private int getHeight(TreeNode node) {
 
         return (node == null)
@@ -486,7 +431,6 @@ public class MyAVLTree {
                 : node.height;
 
     }
-
 
     private int getBalanceFactor(
             TreeNode node) {
@@ -497,7 +441,6 @@ public class MyAVLTree {
                 - getHeight(node.right);
 
     }
-
 
     private TreeNode findMin(
             TreeNode node) {
@@ -511,7 +454,6 @@ public class MyAVLTree {
         return node;
 
     }
-
 
     private void displayTree(
             TreeNode node,
