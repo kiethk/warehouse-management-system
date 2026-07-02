@@ -14,108 +14,11 @@ import model.Product;
 import model.MyAVLTree;
 import controller.WarehouseController;
 
-/*
-=================================================
 
-TEAM ARCHITECTURE
-
-FileIO chịu trách nhiệm:
-
-CSV File
-
-    ↓
-
-Đọc dữ liệu
-
-    ↓
-
-Tạo Product + Batch
-
-    ↓
-
-Đưa vào AVL Tree
-
-
-Ví dụ CSV:
-
-barcode,productName,batchCode,expiryDate,quantity,price
-
-P0001,Egg,B001,2026-07-01,30,25000
-P0001,Egg,B002,2026-07-15,40,26000
-P0002,Milk,B003,2026-08-01,20,30000
-
-
-Load Flow:
-
-Dòng 1:
-
-search(P0001)
-
-Không có
-
-↓
-
-create Product
-
-↓
-
-insert AVL
-
-↓
-
-addBatch(B001)
-
-
-Dòng 2:
-
-search(P0001)
-
-Đã tồn tại
-
-↓
-
-addBatch(B002)
-
-
-Kết quả:
-
-AVL
-
-        P0002
-       /
-    P0001
-
-P0001
-
-Front
-
-B001
-B002
-
-Rear
-
-=================================================
- */
 public class FileIO {
 
 
-    /*
-    =================================================
 
-    KIỆT:
-
-    Đọc file warehouse CSV ban đầu
-
-    Input:
-
-    data/initial/warehouse_100.csv
-
-    Output:
-
-    AVL đã chứa Product và Queue Batch
-
-    =================================================
-     */
     // TODO KIỆT
     public static void loadWarehouseData(
             String filePath,

@@ -8,18 +8,6 @@ public class Product {
 
     private MyQueue<Batch> batchQueue;
 
-    /*
-        HUY:
-        Queue sẽ chứa Batch
-
-        Front
-
-        B001
-        B002
-        B003
-
-        Rear
-    */
 
     public Product() {
         this.batchQueue = new MyQueue<>();
@@ -33,45 +21,11 @@ public class Product {
         this.batchQueue = new MyQueue<>();
     }
 
-    /*
-        KIỆT:
-        Khi nhập thêm lô hàng:
-
-        P0001 Egg
-
-        enqueue(B001)
-        enqueue(B002)
-
-        Queue của Egg:
-
-        Front
-
-        B001
-        B002
-
-        Rear
-     */
     public void addBatch(Batch batch) {
         batchQueue.enqueue(batch); // Đã mở khóa việc thêm Batch vào Queue
     }
 
-    /*
-        KIỆT:
 
-        Tổng số lượng của Product
-        = tổng quantity của tất cả Batch
-
-        Ví dụ:
-
-        B001 = 30
-        B002 = 40
-        B003 = 20
-
-        Total = 90
-
-        HUY:
-        Queue cần hỗ trợ duyệt node để hàm này hoạt động
-    */
     public int getTotalQuantity() {
         int total = 0;
 
