@@ -141,7 +141,6 @@ public class MyAVLTree {
                         .compareTo(
                                 root.left.data.getBarcode()
                         ) < 0) {
-
             return rotateRight(root);
 
         }
