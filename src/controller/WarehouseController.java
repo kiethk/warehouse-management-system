@@ -164,8 +164,8 @@ public class WarehouseController {
         }
 
         targetProduct.addBatch(newBatch);
-        System.out.println("Đã nhập thành công lô hàng " + newBatch.getBatchCode()
-                + " vào sản phẩm " + barcode);
+        System.out.println("Successfully imported batch " + newBatch.getBatchCode()
+                + " for product " + barcode);
     }
 
 
@@ -192,8 +192,8 @@ public class WarehouseController {
 
         // BƯỚC 2: Thêm Batch vào Queue
         targetProduct.addBatch(newBatch);
-        System.out.println("Đã nhập thành công lô hàng " + newBatch.getBatchCode()
-                + " vào sản phẩm " + barcode);
+        System.out.println("Successfully imported batch " + newBatch.getBatchCode()
+                + " into product " + barcode);
     }
 
     // TODO HUY
@@ -211,12 +211,12 @@ public class WarehouseController {
             return;
         }
 
-        System.out.println("\nYêu cầu xuất " + dispatchQuantity + " sản phẩm (" + barcode + ").");
+        System.out.println("\nRequested dispatch of " + dispatchQuantity + " items (" + barcode + ").");
 
         // BƯỚC 2: Kiểm tra tổng tồn kho
         int totalAvailable = targetProduct.getTotalQuantity();
         if (totalAvailable < dispatchQuantity) {
-            System.out.println("Lỗi: Không đủ hàng trong kho! (Tồn: " + totalAvailable + ", Yêu cầu: " + dispatchQuantity + ")");
+            System.out.println("Error: Insufficient stock in inventory! (Available: " + totalAvailable + ", Requested: " + dispatchQuantity + ")");
             return;
         }
 
@@ -236,24 +236,24 @@ public class WarehouseController {
                 // Lấy ra khỏi Queue (Dequeue)
                 targetProduct.getBatchQueue().dequeue();
 
-                System.out.println(" -> Đã xuất " + batchQty + " từ lô [" + frontBatch.getBatchCode() + "] (Lô này đã xuất hết).");
+                System.out.println(" -> Dispatched " + batchQty + " from batch [" + frontBatch.getBatchCode() + "] (This batch is fully depleted).");
             } else {
                 // TRƯỜNG HỢP 2: Lô hàng hiện tại lớn hơn số lượng cần lấy
                 // Chỉ trừ đi phần cần thiết, KHÔNG dequeue lô này
                 frontBatch.setQuantity(batchQty - remainingToDispatch);
 
-                System.out.println(" -> Đã xuất " + remainingToDispatch + " từ lô [" + frontBatch.getBatchCode() + "] (Lô này còn lại: " + frontBatch.getQuantity() + ").");
+                System.out.println(" -> Dispatched " + remainingToDispatch + " from batch [" + frontBatch.getBatchCode() + "] (Remaining in batch: " + frontBatch.getQuantity() + ").");
 
                 // Đã lấy đủ hàng
                 remainingToDispatch = 0;
             }
         }
 
-        System.out.println("Hoàn tất xuất hàng! Tổng tồn kho hiện tại: " + targetProduct.getTotalQuantity());
+        System.out.println("Dispatch completed! Current total inventory: " + targetProduct.getTotalQuantity());
 
         if (targetProduct.getBatchQueue().isEmpty()) {
             avlIndex.delete(barcode);
-            System.out.println("Sản phẩm " + barcode + " đã hết hàng và được xóa khỏi kho.");
+            System.out.println("Product " + barcode + " is out of stock and has been removed from the inventory.");
         }
     }
 
